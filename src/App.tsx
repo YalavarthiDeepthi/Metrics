@@ -10,6 +10,7 @@ import Wrapper from './components/Wrapper';
 import MultipleSelect from './components/Select';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Metrics from './components/Metrics';
 
 const store = createStore();
 const theme = createMuiTheme({
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
     select: {
       paddingRight: '10px',
       float: 'right',
-      width:'70%'
+      width: '70%',
     },
   }),
 );
@@ -54,8 +55,10 @@ export default function App() {
       <Provider store={store}>
         <Wrapper>
           <Header />
+          {/* created a grid to split the screen for cards and select dropdown */}
           <Grid container className={classes.root} spacing={2}>
             <Grid item xs={6}>
+              <Metrics />
             </Grid>
             <Grid item xs={6}>
               <div className={classes.select}>

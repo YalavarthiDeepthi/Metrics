@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     formControl: {
       margin: theme.spacing(1),
-      width:'100%',
+      width: '100%',
     },
     chips: {
       display: 'flex',
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     chip: {
       margin: 2,
-      backgroundColor: 'white'
+      backgroundColor: 'white',
     },
     noLabel: {
       marginTop: theme.spacing(3),
@@ -58,7 +58,7 @@ export default function MultipleSelect() {
   const classes = useStyles();
   const theme = useTheme();
   const [metricName, setMetricName] = React.useState<string[]>([]);
-  
+
   //query garphql getMetrics data
   const metricsData = useQuery(query);
 
@@ -73,9 +73,9 @@ export default function MultipleSelect() {
     dispatch(actions.storeMetricNames(metricName));
   }, [metricName]);
 
-  const handleDelete=(e:any)=>{
+  const handleDelete = (e: any) => {
     e.stopPropogation();
-  }
+  };
 
   //used material-ui multiple select component
   return (
@@ -86,12 +86,12 @@ export default function MultipleSelect() {
           id="demo-mutiple-name"
           multiple
           value={metricName}
-          onChange={handleChange} 
+          onChange={handleChange}
           input={<Input id="select-multiple-chip" />}
-          renderValue={(selected) => (
+          renderValue={selected => (
             <div className={classes.chips}>
-              {(selected as string[]).map((value) => (
-                <Chip key={value} label={value} className={classes.chip} onDelete={(e)=>handleDelete(e)}/>
+              {(selected as string[]).map(value => (
+                <Chip key={value} label={value} className={classes.chip} onDelete={e => handleDelete(e)} />
               ))}
             </div>
           )}

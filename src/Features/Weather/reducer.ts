@@ -38,7 +38,7 @@ const slice = createSlice({
 
     //set the data in store
     storeMetricNames: (state, action: PayloadAction<Array<string>>) => {
-      state.metricNames=action.payload
+      state.metricNames = action.payload;
     },
 
     weatherApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,

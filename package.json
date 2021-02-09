@@ -35,11 +35,11 @@
     "urql": "^1.6.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm run prettier && react-scripts start ",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier --write \"**/*.+(js|jsx|json|tsx|css|md)\""
+    "prettier": "prettier --write \"**/*.+(js|jsx|json|tsx|ts|css|md)\""
   },
   "eslintConfig": {
     "extends": "react-app"
