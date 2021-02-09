@@ -73,10 +73,6 @@ export default function MultipleSelect() {
     dispatch(actions.storeMetricNames(metricName));
   }, [metricName]);
 
-  const handleDelete = (e: any) => {
-    e.stopPropogation();
-  };
-
   //used material-ui multiple select component
   return (
     <div>
@@ -91,7 +87,7 @@ export default function MultipleSelect() {
           renderValue={selected => (
             <div className={classes.chips}>
               {(selected as string[]).map(value => (
-                <Chip key={value} label={value} className={classes.chip} onDelete={e => handleDelete(e)} />
+                <Chip key={value} label={value} className={classes.chip} />
               ))}
             </div>
           )}

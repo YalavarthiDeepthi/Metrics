@@ -11,6 +11,7 @@ import MultipleSelect from './components/Select';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Metrics from './components/Metrics';
+import Chart from './components/Chart';
 
 const store = createStore();
 const theme = createMuiTheme({
@@ -49,6 +50,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function App() {
   const classes = useStyles();
+  const after = Date.now() - 30 * 1000 * 60;
+  const before = Date.now();
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
@@ -66,6 +69,7 @@ export default function App() {
               </div>
             </Grid>
           </Grid>
+          <Chart after={after} before={before} />
         </Wrapper>
       </Provider>
     </MuiThemeProvider>

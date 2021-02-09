@@ -2,8 +2,6 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { IState } from '../store';
-import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,13 +26,6 @@ const useStyles = makeStyles({
   },
 });
 
-const getMetricState = (state: IState) => {
-  const { metricNames } = state.weather;
-  return {
-    metricNames,
-  };
-};
-
 const query = gql`
   query GetLastMetricValue($metricName: String!) {
     getLastKnownMeasurement(metricName: $metricName) {
@@ -52,8 +43,6 @@ interface SimpleCardProps {
 
 export default function SimpleCard(Props: SimpleCardProps) {
   const classes = useStyles();
-
-  const { metricNames } = useSelector(getMetricState);
 
   var metricName = Props.metricName;
 
