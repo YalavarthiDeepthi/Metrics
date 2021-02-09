@@ -10,11 +10,16 @@ export type ApiErrorAction = {
   error: string;
 };
 
+export type metricNameType = {
+  metricNames: Array<string>;
+};
+
 const initialState = {
   temperatureinCelsius: 0,
   temperatureinFahrenheit: 0,
   description: '',
   locationName: '',
+  metricNames: Array<string>(),
 };
 
 const toF = (c: number) => (c * 9) / 5 + 32;
@@ -30,6 +35,12 @@ const slice = createSlice({
       state.description = description;
       state.locationName = locationName;
     },
+
+    //set the data in store
+    storeMetricNames: (state, action: PayloadAction<Array<string>>) => {
+      state.metricNames=action.payload
+    },
+
     weatherApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,
   },
 });

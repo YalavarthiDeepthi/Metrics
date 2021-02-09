@@ -7,7 +7,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
 import Wrapper from './components/Wrapper';
-import NowWhat from './components/NowWhat';
+import MultipleSelect from './components/Select';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const store = createStore();
 const theme = createMuiTheme({
@@ -24,17 +26,45 @@ const theme = createMuiTheme({
   },
 });
 
-const App = () => (
-  <MuiThemeProvider theme={theme}>
-    <CssBaseline />
-    <Provider store={store}>
-      <Wrapper>
-        <Header />
-        <NowWhat />
-        <ToastContainer />
-      </Wrapper>
-    </Provider>
-  </MuiThemeProvider>
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    paper: {
+      height: 140,
+      width: 100,
+    },
+    control: {
+      padding: theme.spacing(2),
+    },
+    select: {
+      paddingRight: '10px',
+      float: 'right',
+      width:'70%'
+    },
+  }),
 );
 
-export default App;
+export default function App() {
+  const classes = useStyles();
+  return (
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      <Provider store={store}>
+        <Wrapper>
+          <Header />
+          <Grid container className={classes.root} spacing={2}>
+            <Grid item xs={6}>
+            </Grid>
+            <Grid item xs={6}>
+              <div className={classes.select}>
+                <MultipleSelect />
+              </div>
+            </Grid>
+          </Grid>
+        </Wrapper>
+      </Provider>
+    </MuiThemeProvider>
+  );
+}
