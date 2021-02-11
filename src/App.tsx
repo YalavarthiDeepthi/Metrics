@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Metrics from './components/Metrics';
 import Chart from './components/Chart';
+import Subscriber from "./components/Subscriber";
 
 const store = createStore();
 const theme = createMuiTheme({
@@ -56,6 +57,7 @@ export default function App() {
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <Provider store={store}>
+        <Subscriber />
         <Wrapper>
           <Header />
           {/* created a grid to split the screen for cards and select dropdown */}

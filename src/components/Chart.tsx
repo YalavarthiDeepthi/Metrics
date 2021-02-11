@@ -1,15 +1,18 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import * as moment from 'moment';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea } from 'recharts';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { IState } from '../store';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import { actions } from '../Features/Weather/reducer';
 
 const getMetricState = (state: IState) => {
-  const { metricNames } = state.weather;
+  const { metricNames, getMeasurements, getNewMeasurement } = state.weather;
   return {
     metricNames,
+    getMeasurements,
+    getNewMeasurement,
   };
 };
 
@@ -36,12 +39,19 @@ interface ExampleObject {
   [key: string]: any;
 }
 
-export default function Chart(Props: ChartProps) {
-  const { metricNames } = useSelector(getMetricState);
+const returnThirtyMinutesBefore = () => {
+  return Date.now() - 30 * 60 * 1000;
+}
+const thirtyMinutesBefore = returnThirtyMinutesBefore();
 
+export default function Chart(Props: ChartProps) {
+  const dispatch = useDispatch();
+  const { metricNames, getMeasurements, getNewMeasurement } = useSelector(getMetricState);
+  
+  
   var inputVariables: Array<Object> = [];
   metricNames.map((metricName: string) => {
-    inputVariables.push({ metricName: metricName, after: Props.after, before: Props.before });
+    inputVariables.push({ metricName: metricName, after: thirtyMinutesBefore });
   });
 
   //query the api with dynamic variables
@@ -51,12 +61,16 @@ export default function Chart(Props: ChartProps) {
     },
   });
 
+  useEffect(() => {
+    //dispatch actions to store the metrics array in store
+    if (!multipleMeasurements) return;
+    multipleMeasurements.data && dispatch(actions.storeMultipleMeasurements(multipleMeasurements.data.getMultipleMeasurements));
+  }, [multipleMeasurements]);
+
   //loop over the measurements data to create a chart array to feed the Line chart
   var chartArray: Array<Object> = [];
-  multipleMeasurements &&
-    multipleMeasurements.data &&
-    multipleMeasurements.data.getMultipleMeasurements &&
-    multipleMeasurements.data.getMultipleMeasurements.forEach((element: ExampleObject) => {
+  getMeasurements &&
+  getMeasurements.forEach((element: ExampleObject) => {
       element.measurements.forEach((measurement: ExampleObject, index: number) => {
         if (chartArray.length < element.measurements.length) {
           chartArray.push({ [`${element['metric']}`]: measurement.value, at: measurement.at });
