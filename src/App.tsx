@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Metrics from './components/Metrics';
 import Chart from './components/Chart';
-import Subscriber from "./components/Subscriber";
+import Subscriber from './components/Subscriber';
 
 const store = createStore();
 const theme = createMuiTheme({

@@ -17,7 +17,7 @@ export type newMeasurementType = {
 export type metricNameType = {
   metricNames: Array<string>;
   getMeasurements: Array<Object>;
-  getNewMeasurement: Object;
+  getNewMeasurement: Array<Object>;
 };
 
 const initialState = {
@@ -27,7 +27,7 @@ const initialState = {
   locationName: '',
   metricNames: Array<string>(),
   getMeasurements: Array<Object>(),
-  getNewMeasurement: Object,
+  getNewMeasurement: Array<Object>(),
 };
 
 const toF = (c: number) => (c * 9) / 5 + 32;
@@ -46,6 +46,9 @@ const slice = createSlice({
 
     //set the data in store
     storeMetricNames: (state, action: PayloadAction<Array<string>>) => {
+      if ([...state.metricNames] !== action.payload) {
+        state.getNewMeasurement = [];
+      }
       state.metricNames = action.payload;
     },
 
@@ -55,7 +58,10 @@ const slice = createSlice({
 
     storeNewMeasurement: (state, action: PayloadAction<newMeasurementType>) => {
       const { data } = action.payload;
-      state.getNewMeasurement = data || {}; 
+      var newMeasurement: any = data && Object.values(data)[0];
+      var getNew: Array<Object> = [];
+      getNew.push(...state.getNewMeasurement, newMeasurement);
+      state.getNewMeasurement = getNew || {};
     },
 
     weatherApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,

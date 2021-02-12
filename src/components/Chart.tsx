@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import * as moment from 'moment';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea } from 'recharts';
 import { useSelector, useDispatch } from 'react-redux';
@@ -46,15 +46,29 @@ const thirtyMinutesBefore = returnThirtyMinutesBefore();
 
 export default function Chart(Props: ChartProps) {
   const dispatch = useDispatch();
+  const [metricValues, setMetricValues] = useState<Array<string>>([]);
+  const [inputVariables, setInput] = useState<Array<Object>>([]);
   const { metricNames, getMeasurements, getNewMeasurement } = useSelector(getMetricState);
-  
-  
-  var inputVariables: Array<Object> = [];
-  metricNames.map((metricName: string) => {
-    inputVariables.push({ metricName: metricName, after: thirtyMinutesBefore });
-  });
 
-  //query the api with dynamic variables
+  useEffect(() => {
+    function getDate(){
+      if(metricValues !== metricNames){
+        return returnThirtyMinutesBefore();
+      }
+      else{
+        setMetricValues(metricNames);
+        return thirtyMinutesBefore;
+      }
+    }
+    let input: Array<Object> = [];
+    metricNames.map((metricName: string) => {
+      return input.push({ metricName: metricName, after: getDate()});
+    });
+    setInput(input);
+  }, [metricNames]);
+  
+
+  // query the api with dynamic variables
   var multipleMeasurements = useQuery(query, {
     variables: {
       input: inputVariables,
@@ -64,21 +78,30 @@ export default function Chart(Props: ChartProps) {
   useEffect(() => {
     //dispatch actions to store the metrics array in store
     if (!multipleMeasurements) return;
-    multipleMeasurements.data && dispatch(actions.storeMultipleMeasurements(multipleMeasurements.data.getMultipleMeasurements));
+    multipleMeasurements.data &&
+      dispatch(actions.storeMultipleMeasurements(multipleMeasurements.data.getMultipleMeasurements));
   }, [multipleMeasurements]);
 
   //loop over the measurements data to create a chart array to feed the Line chart
   var chartArray: Array<Object> = [];
   getMeasurements &&
-  getMeasurements.forEach((element: ExampleObject) => {
+    getMeasurements.forEach((element: ExampleObject) => {
       element.measurements.forEach((measurement: ExampleObject, index: number) => {
         if (chartArray.length < element.measurements.length) {
           chartArray.push({ [`${element['metric']}`]: measurement.value, at: measurement.at });
         } else {
           Object.assign(chartArray[index], { [`${element['metric']}`]: measurement.value });
         }
-      });
+      }); 
     });
+  var newMeasurementValue = Object.values(getNewMeasurement);
+  if (newMeasurementValue) {
+    newMeasurementValue.map((measurement: ExampleObject) => {
+      if (metricNames.includes(measurement && measurement.metric)) {
+        return (chartArray.push({ [`${measurement['metric']}`]: measurement.value, at: measurement.at }))
+      }
+    });
+  }
 
   const initialState = {
     chartArray,
