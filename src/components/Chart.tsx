@@ -41,7 +41,7 @@ interface ExampleObject {
 
 const returnThirtyMinutesBefore = () => {
   return Date.now() - 30 * 60 * 1000;
-}
+};
 
 export default function Chart(Props: ChartProps) {
   const dispatch = useDispatch();
@@ -49,16 +49,15 @@ export default function Chart(Props: ChartProps) {
   const { metricNames, getMeasurements, getNewMeasurement } = useSelector(getMetricState);
 
   useEffect(() => {
-    function getDate(){
-        return returnThirtyMinutesBefore();
+    function getDate() {
+      return returnThirtyMinutesBefore();
     }
     let input: Array<Object> = [];
     metricNames.map((metricName: string) => {
-      return input.push({ metricName: metricName, after: getDate()});
+      return input.push({ metricName: metricName, after: getDate() });
     });
     setInput(input);
   }, [metricNames]);
-  
 
   // query the api with dynamic variables
   var multipleMeasurements = useQuery(query, {
@@ -84,16 +83,26 @@ export default function Chart(Props: ChartProps) {
         } else {
           Object.assign(chartArray[index], { [`${element['metric']}`]: measurement.value });
         }
-      }); 
+      });
     });
   var newMeasurementValue = Object.values(getNewMeasurement);
-  if (newMeasurementValue) {
-    newMeasurementValue.map((measurement: ExampleObject) => {
-      if (metricNames.includes(measurement && measurement.metric)) {
-        return (chartArray.push({ [`${measurement['metric']}`]: measurement.value, at: measurement.at }))
-      }
-    });
+  //groupby the new measurement values and add them to chartArray
+  function groupArrayOfObjects(list: ExampleObject[], key: string) {
+    return list.reduce(function(r, x) {
+      (r[x[key]] = r[x[key]] || []).push(x);
+      return r;
+    }, {});
   }
+  var grouped = groupArrayOfObjects(newMeasurementValue, 'at');
+  Object.keys(grouped).forEach(key => {
+    var newValue: ExampleObject = {};
+    newValue['at'] = grouped[key][0].at;
+    grouped[key].forEach((groupedValue: ExampleObject) => {
+      var keyValue = groupedValue.metric;
+      newValue[`${keyValue}`] = groupedValue.value;
+    });
+    chartArray.push(newValue);
+  });
 
   const initialState = {
     chartArray,
