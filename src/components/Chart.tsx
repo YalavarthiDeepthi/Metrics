@@ -42,23 +42,15 @@ interface ExampleObject {
 const returnThirtyMinutesBefore = () => {
   return Date.now() - 30 * 60 * 1000;
 }
-const thirtyMinutesBefore = returnThirtyMinutesBefore();
 
 export default function Chart(Props: ChartProps) {
   const dispatch = useDispatch();
-  const [metricValues, setMetricValues] = useState<Array<string>>([]);
   const [inputVariables, setInput] = useState<Array<Object>>([]);
   const { metricNames, getMeasurements, getNewMeasurement } = useSelector(getMetricState);
 
   useEffect(() => {
     function getDate(){
-      if(metricValues !== metricNames){
         return returnThirtyMinutesBefore();
-      }
-      else{
-        setMetricValues(metricNames);
-        return thirtyMinutesBefore;
-      }
     }
     let input: Array<Object> = [];
     metricNames.map((metricName: string) => {
