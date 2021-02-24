@@ -10,7 +10,7 @@ const newMessages = gql`
       metric
       at
       value
-      unit
+      unit 
     }
   }
 `;
