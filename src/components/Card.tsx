@@ -5,6 +5,19 @@ import Typography from '@material-ui/core/Typography';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { IState } from '../store';
+
+const getMetricState = (state: IState) => {
+  const { getNewMeasurement } = state.weather;
+  return {
+    getNewMeasurement,
+  };
+};
+
+interface ExampleObject {
+  [key: string]: any;
+}
 
 const useStyles = makeStyles({
   root: {
@@ -43,6 +56,7 @@ interface SimpleCardProps {
 
 export default function SimpleCard(Props: SimpleCardProps) {
   const classes = useStyles();
+  const { getNewMeasurement } = useSelector(getMetricState);
 
   var metricName = Props.metricName;
 
@@ -51,17 +65,20 @@ export default function SimpleCard(Props: SimpleCardProps) {
     variables: {
       metricName: metricName,
     },
-    pollInterval: 1300,
   });
+
+  var newMeasurementValue = Object.values(getNewMeasurement);
+  var newMetricValue = newMeasurementValue.filter((x: ExampleObject) => x.metric == metricName)
+  var newValue: ExampleObject = newMetricValue.length>0 ? newMetricValue[newMetricValue.length-1] : "";
 
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h6" component="h6">
-          {lastMetricValue.data && lastMetricValue.data.getLastKnownMeasurement.metric}
+          {metricName}
         </Typography>
         <Typography variant="h3" component="h3">
-          {lastMetricValue.data && lastMetricValue.data.getLastKnownMeasurement.value}
+          {newValue && newValue.value || lastMetricValue.data && lastMetricValue.data.getLastKnownMeasurement.value}
         </Typography>
       </CardContent>
     </Card>
