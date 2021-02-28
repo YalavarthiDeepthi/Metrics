@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSubscription } from '@apollo/react-hooks';
-import { actions } from '../Features/Weather/reducer';
+import { actions } from '../Features/Metrics/reducer';
 import gql from 'graphql-tag';
 
 const newMessages = gql`
@@ -10,7 +10,7 @@ const newMessages = gql`
       metric
       at
       value
-      unit 
+      unit
     }
   }
 `;

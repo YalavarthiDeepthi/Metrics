@@ -5,10 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IState } from '../store';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import { actions } from '../Features/Weather/reducer';
+import { actions } from '../Features/Metrics/reducer';
 
 const getMetricState = (state: IState) => {
-  const { metricNames, getMeasurements, getNewMeasurement } = state.weather;
+  const { metricNames, getMeasurements, getNewMeasurement } = state.metrics;
   return {
     metricNames,
     getMeasurements,

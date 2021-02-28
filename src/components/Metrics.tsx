@@ -1,5 +1,4 @@
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SimpleCard from './Card';
 import { IState } from '../store';
@@ -8,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 const getMetricState = (state: IState) => {
-  const { metricNames } = state.weather;
+  const { metricNames } = state.metrics;
   return {
     metricNames,
   };

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { IState } from '../store';
 
 const getMetricState = (state: IState) => {
-  const { getNewMeasurement } = state.weather;
+  const { getNewMeasurement } = state.metrics;
   return {
     getNewMeasurement,
   };
@@ -17,6 +17,14 @@ const getMetricState = (state: IState) => {
 
 interface ExampleObject {
   [key: string]: any;
+}
+
+interface Measurement {
+  metric: string;
+  at: any;
+  value: number;
+  unit: string;
+  __typename: string;
 }
 
 const useStyles = makeStyles({
@@ -68,8 +76,8 @@ export default function SimpleCard(Props: SimpleCardProps) {
   });
 
   var newMeasurementValue = Object.values(getNewMeasurement);
-  var newMetricValue = newMeasurementValue.filter((x: ExampleObject) => x.metric == metricName)
-  var newValue: ExampleObject = newMetricValue.length>0 ? newMetricValue[newMetricValue.length-1] : "";
+  var newMetricValue = newMeasurementValue.filter((x: Measurement) => x.metric === metricName)
+  var newValue: any = newMetricValue.length>0 ? newMetricValue[newMetricValue.length-1] : "" ;
 
   return (
     <Card className={classes.root}>
@@ -78,7 +86,7 @@ export default function SimpleCard(Props: SimpleCardProps) {
           {metricName}
         </Typography>
         <Typography variant="h3" component="h3">
-          {newValue && newValue.value || lastMetricValue.data && lastMetricValue.data.getLastKnownMeasurement.value}
+          {(newValue && newValue.value) || (lastMetricValue.data && lastMetricValue.data.getLastKnownMeasurement.value)}
         </Typography>
       </CardContent>
     </Card>

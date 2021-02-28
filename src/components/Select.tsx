@@ -8,7 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { useDispatch } from 'react-redux';
-import { actions } from '../Features/Weather/reducer';
+import { actions } from '../Features/Metrics/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
